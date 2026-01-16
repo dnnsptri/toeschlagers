@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Refresh handled by JavaScript with random timing -->
+    <title>Spotify Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #8B3600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .player-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .spotify-embed {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .spotify-embed iframe {
+            display: block;
+        }
+
+        .refresh-indicator {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .refresh-countdown {
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="spotify-embed">
+            <iframe
+                src="https://open.spotify.com/embed/track/38peXLOeWRJPuEPs4wMYLI?utm_source=generator&autoplay=1"
+                width="100%"
+                height="352"
+                frameBorder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="eager">
+            </iframe>
+        </div>
+
+        <div class="refresh-indicator">
+            Page refreshes in <span class="refresh-countdown" id="countdown">2:20</span>
+        </div>
+    </div>
+
+    <script>
+        // Random duration between 2:05 (125s) and 2:25 (145s)
+        const MIN_DURATION = 125;
+        const MAX_DURATION = 145;
+        const TOTAL_DURATION = Math.floor(Math.random() * (MAX_DURATION - MIN_DURATION + 1)) + MIN_DURATION;
+
+        let currentTime = 0;
+
+        const countdownDisplay = document.getElementById('countdown');
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Set initial countdown display
+        countdownDisplay.textContent = formatTime(TOTAL_DURATION);
+
+        function updateCountdown() {
+            currentTime += 1;
+            const remaining = TOTAL_DURATION - currentTime;
+            countdownDisplay.textContent = formatTime(remaining);
+
+            if (currentTime >= TOTAL_DURATION) {
+                window.location.reload();
+            }
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
